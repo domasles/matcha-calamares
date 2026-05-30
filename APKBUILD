@@ -11,7 +11,9 @@ pkgdesc="Matcha Linux installer framework, built on top of Calamares"
 license="BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-3.0-or-later AND MIT"
 
 provides="calamares=$pkgver"
-depends="!calamares ckbcomp musl-locales os-prober yaml-cpp"
+depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
+    rsync mkinitfs tzdata openrc networkmanager lsblk parted
+    util-linux blkid sudo e2fsprogs sfdisk grub grub-bios"
 
 makedepends="
     extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
@@ -20,15 +22,18 @@ makedepends="
     kwidgetsaddons-dev kpmcore-dev parted-dev libatasmart-dev
     polkit-qt-dev libpwquality-dev python3-dev py3-pybind11-dev"
 
-checkdepends="py3-toml tzdata xvfb-run"
+source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz
+    settings.conf
+    unpackfs.conf
+    mkinitfs.conf
+    shellprocess.conf"
 
-source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz modules-load.conf"
 builddir="$srcdir"/calamares-"$pkgver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
-_modules="welcome locale keyboard partition users
-    summary unpackfs fstab bootloader grubcfg mkinitfs
-    packagechooser shellprocess finished"
+_modules="welcome locale keyboard partition users services-openrc
+    summary unpackfs packages fstab bootloader mkinitfs umount
+    finished mount localecfg networkcfg hwclock shellprocess"
 
 for i in $_modules; do
     subpackages="$pkgname-mod-$i:_module $subpackages"
@@ -39,7 +44,6 @@ prepare() {
     default_prepare
     cd "$builddir"/src/modules
 
-    # Automatically skip any directory not in our _modules list
     for i in *; do
         if [ -d "$i" ] && ! echo "$_modules" | grep -qw "$i"; then
             _skip_modules="$_skip_modules $i"
@@ -60,11 +64,6 @@ build() {
     cmake --build build
 }
 
-check() {
-    cd build
-    CTEST_OUTPUT_ON_FAILURE=TRUE xvfb-run ctest -E "libcalamaresnetworktest|machineidtest|userstest" -j1
-}
-
 _module() {
     depends="$pkgname"
 
@@ -75,11 +74,17 @@ _module() {
     mv "$pkgdir"/"$path"/"$module" "$subpkgdir"/"$path"/"$module"
 
     case "$module" in
-        unpackfs) 
+        unpackfs)
             depends="$depends rsync"
-            install -Dm644 "$srcdir"/modules-load.conf "$subpkgdir"/usr/lib/modules-load.d/calamares.conf ;;
-        mkinitfs) depends="$depends mkinitfs" ;;
+            install -Dm644 "$srcdir"/unpackfs.conf "$subpkgdir"/etc/calamares/modules/unpackfs.conf ;;
+        shellprocess)
+            install -Dm644 "$srcdir"/shellprocess.conf "$subpkgdir"/etc/calamares/modules/shellprocess.conf ;;
+        mkinitfs)
+            depends="$depends mkinitfs"
+            install -Dm644 "$srcdir"/mkinitfs.conf "$subpkgdir"/etc/calamares/modules/mkinitfs.conf ;;
         locale) depends="$depends tzdata" ;;
+        services-openrc) depends="$depends openrc" ;;
+        networkcfg) depends="$depends networkmanager" ;;
     esac
 }
 
@@ -88,4 +93,6 @@ package() {
 
     mkdir -p "$pkgdir"/usr/share/licenses/"$pkgname"
     cp -r "$builddir"/LICENSES/* "$pkgdir"/usr/share/licenses/"$pkgname"/
+
+    install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
 }

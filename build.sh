@@ -5,8 +5,8 @@ ALPINE_VERSION="3.23"
 PACKAGE_NAME="matcha-calamares"
 
 WORKSPACE=$(pwd)
-BUILD_ROOT="$HOME"/build-space
-PKG_DIR="$BUILD_ROOT"/"$PACKAGE_NAME"
+BUILD_ROOT="$HOME/build-space"
+PKG_DIR="$BUILD_ROOT/$PACKAGE_NAME"
 
 if [ "$(id -u)" -eq 0 ]; then
     apk update
@@ -34,13 +34,10 @@ fi
 mkdir -p "$PKG_DIR"
 
 cp "$WORKSPACE"/APKBUILD "$PKG_DIR"/
-cp "$WORKSPACE"/modules-load.conf "$PKG_DIR"/ 2>/dev/null || true
+cp "$WORKSPACE"/*.conf "$PKG_DIR"/ 2>/dev/null || true
 
 cd "$PKG_DIR"
 
 abuild -F checksum
-
-doas apk update
 doas abuild -F deps
-
 abuild -r -P /out
