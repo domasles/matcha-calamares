@@ -34,7 +34,9 @@ fi
 mkdir -p "$PKG_DIR"
 
 cp "$WORKSPACE"/APKBUILD "$PKG_DIR"/
-cp "$WORKSPACE"/*.conf "$PKG_DIR"/ 2>/dev/null || true
+cp "$WORKSPACE"/config/*.conf "$PKG_DIR"/
+cp "$WORKSPACE"/settings/*.conf "$PKG_DIR"/
+cp "$WORKSPACE"/scripts/*.sh "$PKG_DIR"/
 
 cd "$PKG_DIR"
 

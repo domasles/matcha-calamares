@@ -25,9 +25,11 @@ makedepends="
 source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz
     settings.conf
     mkinitfs.conf
+    users.conf
     shellprocess.conf
+    shellprocess@install.conf
     shellprocess@bootstrap.conf
-    shellprocess@install.conf"
+    extract-overlay.sh"
 
 builddir="$srcdir"/calamares-"$pkgver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
@@ -78,6 +80,8 @@ _module() {
         mkinitfs)
             depends="$depends mkinitfs"
             install -Dm644 "$srcdir"/mkinitfs.conf "$subpkgdir"/etc/calamares/modules/mkinitfs.conf ;;
+        users)
+            install -Dm644 "$srcdir"/users.conf "$subpkgdir"/etc/calamares/modules/users.conf ;;
         shellprocess)
             install -Dm644 "$srcdir"/shellprocess.conf "$subpkgdir"/etc/calamares/modules/shellprocess.conf
             install -Dm644 "$srcdir"/shellprocess@bootstrap.conf "$subpkgdir"/etc/calamares/modules/shellprocess@bootstrap.conf
@@ -95,4 +99,5 @@ package() {
     cp -r "$builddir"/LICENSES/* "$pkgdir"/usr/share/licenses/"$pkgname"/
 
     install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
+    install -Dm755 "$srcdir"/extract-overlay.sh "$pkgdir"/usr/libexec/calamares/extract-overlay.sh
 }
