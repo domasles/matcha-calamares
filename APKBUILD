@@ -24,9 +24,10 @@ makedepends="
 
 source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz
     settings.conf
-    unpackfs.conf
     mkinitfs.conf
-    shellprocess.conf"
+    shellprocess.conf
+    shellprocess@bootstrap.conf
+    shellprocess@install.conf"
 
 builddir="$srcdir"/calamares-"$pkgver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
@@ -74,14 +75,13 @@ _module() {
     mv "$pkgdir"/"$path"/"$module" "$subpkgdir"/"$path"/"$module"
 
     case "$module" in
-        unpackfs)
-            depends="$depends rsync"
-            install -Dm644 "$srcdir"/unpackfs.conf "$subpkgdir"/etc/calamares/modules/unpackfs.conf ;;
-        shellprocess)
-            install -Dm644 "$srcdir"/shellprocess.conf "$subpkgdir"/etc/calamares/modules/shellprocess.conf ;;
         mkinitfs)
             depends="$depends mkinitfs"
             install -Dm644 "$srcdir"/mkinitfs.conf "$subpkgdir"/etc/calamares/modules/mkinitfs.conf ;;
+        shellprocess)
+            install -Dm644 "$srcdir"/shellprocess.conf "$subpkgdir"/etc/calamares/modules/shellprocess.conf
+            install -Dm644 "$srcdir"/shellprocess@bootstrap.conf "$subpkgdir"/etc/calamares/modules/shellprocess@bootstrap.conf
+            install -Dm644 "$srcdir"/shellprocess@install.conf "$subpkgdir"/etc/calamares/modules/shellprocess@install.conf ;;
         locale) depends="$depends tzdata" ;;
         services-openrc) depends="$depends openrc" ;;
         networkcfg) depends="$depends networkmanager" ;;
