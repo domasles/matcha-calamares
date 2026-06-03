@@ -23,13 +23,10 @@ makedepends="
     polkit-qt-dev libpwquality-dev python3-dev py3-pybind11-dev"
 
 source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz
-    settings.conf
-    mkinitfs.conf
-    users.conf
-    shellprocess.conf
-    shellprocess@install.conf
-    shellprocess@bootstrap.conf
-    matcha-excludes.txt"
+    calamares-settings.tar.gz
+    calamares-config.tar.gz
+    config.tar.gz
+    branding.tar.gz"
 
 builddir="$srcdir"/calamares-"$pkgver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
@@ -100,4 +97,7 @@ package() {
 
     install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
     install -Dm644 "$srcdir"/matcha-excludes.txt "$pkgdir"/etc/calamares/matcha-excludes.txt
+
+    mkdir -p "$pkgdir"/usr/share/calamares/branding/matcha
+    cp -r "$srcdir"/matcha/* "$pkgdir"/usr/share/calamares/branding/matcha/
 }

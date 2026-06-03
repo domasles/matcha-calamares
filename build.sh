@@ -34,9 +34,11 @@ fi
 mkdir -p "$PKG_DIR"
 
 cp "$WORKSPACE"/APKBUILD "$PKG_DIR"/
-cp "$WORKSPACE"/calamares-config/*.conf "$PKG_DIR"/
-cp "$WORKSPACE"/calamares-settings/*.conf "$PKG_DIR"/
-cp "$WORKSPACE"/config/*.txt "$PKG_DIR"/
+
+tar -czf "$PKG_DIR"/calamares-config.tar.gz -C "$WORKSPACE"/calamares-config .
+tar -czf "$PKG_DIR"/calamares-settings.tar.gz -C "$WORKSPACE"/calamares-settings .
+tar -czf "$PKG_DIR"/config.tar.gz -C "$WORKSPACE"/config .
+tar -czf "$PKG_DIR"/branding.tar.gz -C "$WORKSPACE"/branding matcha
 
 cd "$PKG_DIR"
 

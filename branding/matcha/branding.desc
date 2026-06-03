@@ -1,0 +1,30 @@
+componentName: matcha
+
+sidebar:    qml
+navigation: widget
+
+strings:
+    productName:        Matcha Linux
+    shortProductName:   Matcha
+    version:            ${VERSION}
+    shortVersion:       ${VERSION}
+    versionedName:      Matcha Linux ${VERSION}
+    shortVersionedName: Matcha ${VERSION}
+    productUrl:         https://github.com/domasles/matcha-linux
+    supportUrl:         https://github.com/domasles/matcha-linux/issues
+    releaseNotesUrl:    https://github.com/domasles/matcha-linux
+
+images:
+    productLogo:    "logo.svg"
+    productIcon:    "logo.svg"
+    productWelcome: "logo.svg"
+
+style:
+    SidebarBackground:        "#00280a"
+    SidebarText:              "#FFFFFF"
+    SidebarTextCurrent:       "#FFFFFF"
+    SidebarBackgroundCurrent: "#78be50"
+
+slideshow: "show.qml"
+uploadServer:
+    type: "none"
