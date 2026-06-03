@@ -18,9 +18,18 @@ jobs:
           chmod +x build.sh
           ./build.sh
 
-      - name: Upload APK Artifact
+      - name: Upload APK Artifact (Local Builds Only)
+        if: ${{ env.ACT == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: matcha-calamares-apk
           path: /out/**/*.apk
           if-no-files-found: error
+
+      - name: Upload APK to Release
+        if: ${{ env.ACT != 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /out/**/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

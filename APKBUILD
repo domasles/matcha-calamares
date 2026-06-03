@@ -29,7 +29,7 @@ source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/cala
     shellprocess.conf
     shellprocess@install.conf
     shellprocess@bootstrap.conf
-    extract-overlay.sh"
+    matcha-excludes.txt"
 
 builddir="$srcdir"/calamares-"$pkgver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
@@ -99,5 +99,5 @@ package() {
     cp -r "$builddir"/LICENSES/* "$pkgdir"/usr/share/licenses/"$pkgname"/
 
     install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
-    install -Dm755 "$srcdir"/extract-overlay.sh "$pkgdir"/usr/libexec/calamares/extract-overlay.sh
+    install -Dm644 "$srcdir"/matcha-excludes.txt "$pkgdir"/etc/calamares/matcha-excludes.txt
 }
