@@ -24,14 +24,14 @@ By deploying your own installer infrastructure, you get:
 
 This installer serves as both a practical tool and an educational resource for understanding how Alpine-based system installers work.
 
-## Features
+## Features and Components
 
 This pre-configured installer packages:
 
 - **Calamares** - The modular installer framework
 - **Pre-configured Modules** - Ready-to-use modules for partitioning, user setup, and more
 - **Straightforward Setup Sequence** - A simple, linear installation workflow for the end user
-- **Custom Shell Processes** - For tasks that require more control, like package installation and system overlay from the ISO
+- **Custom Shell Processes** - For tasks that require more control, like package installation
 
 Matcha Calamares aims to keep the system mint post-installation, so it installs everything from the ISO ROM, without reaching out to any external repositories. This ensures a consistent and reliable installation experience.
 
@@ -123,7 +123,7 @@ It is recommended to not remove any existing configuration and building steps in
 
 ## Support
 
-For issues, feature requests, or questions open an issue or pull request on GitHub
+For issues, feature requests, or questions open an issue or pull request on GitHub.
 
 ---
 

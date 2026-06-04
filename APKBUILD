@@ -1,16 +1,19 @@
 # Contributor: Domas Leščinskas <domas.lescinskas@gmail.com>
 # Maintainer: Domas Leščinskas <domas.lescinskas@gmail.com>
 pkgname=matcha-calamares
-pkgver=3.4.2
+
+calamaresver=3.4.2
+
+pkgver=1.0.0.$calamaresver
 pkgrel=0
 
 arch="x86_64"
 
-url="https://calamares.io/"
+url="https://calamares.codeberg.page"
 pkgdesc="Matcha Linux installer framework, built on top of Calamares"
 license="BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-3.0-or-later AND MIT"
 
-provides="calamares=$pkgver"
+provides="calamares=$calamaresver"
 depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
     rsync mkinitfs tzdata openrc networkmanager lsblk parted
     util-linux blkid sudo e2fsprogs sfdisk grub grub-bios"
@@ -22,13 +25,13 @@ makedepends="
     kwidgetsaddons-dev kpmcore-dev parted-dev libatasmart-dev
     polkit-qt-dev libpwquality-dev python3-dev py3-pybind11-dev"
 
-source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz
+source="https://codeberg.org/Calamares/calamares/releases/download/v$calamaresver/calamares-$calamaresver.tar.gz
     calamares-settings.tar.gz
     calamares-config.tar.gz
     excludes.tar.gz
     branding.tar.gz"
 
-builddir="$srcdir"/calamares-"$pkgver"
+builddir="$srcdir"/calamares-"$calamaresver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 _modules="welcome locale keyboard partition users services-openrc

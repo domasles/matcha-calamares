@@ -5,18 +5,19 @@ ALPINE_VERSION="3.23"
 PACKAGE_NAME="matcha-calamares"
 
 WORKSPACE=$(pwd)
+
 BUILD_ROOT="$HOME/build-space"
 PKG_DIR="$BUILD_ROOT/$PACKAGE_NAME"
 
 if [ "$(id -u)" -eq 0 ]; then
     apk update
-    apk add --no-cache alpine-sdk doas git nodejs
+    apk add --no-cache alpine-sdk sudo git nodejs
 
     if ! id builduser >/dev/null 2>&1; then
         adduser -D builduser
         adduser builduser abuild
 
-        echo "permit nopass builduser" > /etc/doas.conf
+        echo "builduser ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/builduser
     fi
 
     chown -R builduser:abuild "$WORKSPACE"
@@ -28,7 +29,7 @@ fi
 
 if [ ! -f "$HOME"/.abuild/*.rsa ]; then
     abuild-keygen -a -n
-    doas cp "$HOME"/.abuild/*.rsa.pub /etc/apk/keys/
+    sudo cp "$HOME"/.abuild/*.rsa.pub /etc/apk/keys/
 fi
 
 mkdir -p "$PKG_DIR"
@@ -44,5 +45,5 @@ tar -czf "$PKG_DIR"/branding.tar.gz -C "$WORKSPACE"/branding matcha
 cd "$PKG_DIR"
 
 abuild -F checksum
-doas abuild -F deps
+sudo abuild -F deps
 abuild -r -P /out
