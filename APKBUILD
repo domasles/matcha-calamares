@@ -25,7 +25,7 @@ makedepends="
 source="https://codeberg.org/Calamares/calamares/releases/download/v$pkgver/calamares-$pkgver.tar.gz
     calamares-settings.tar.gz
     calamares-config.tar.gz
-    config.tar.gz
+    excludes.tar.gz
     branding.tar.gz"
 
 builddir="$srcdir"/calamares-"$pkgver"
@@ -96,7 +96,7 @@ package() {
     cp -r "$builddir"/LICENSES/* "$pkgdir"/usr/share/licenses/"$pkgname"/
 
     install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
-    install -Dm644 "$srcdir"/matcha-excludes.txt "$pkgdir"/etc/calamares/matcha-excludes.txt
+    install -Dm644 "$srcdir"/overlay.txt "$pkgdir"/etc/calamares/excludes/overlay.txt
 
     mkdir -p "$pkgdir"/usr/share/calamares/branding/matcha
     cp -r "$srcdir"/matcha/* "$pkgdir"/usr/share/calamares/branding/matcha/
