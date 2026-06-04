@@ -29,7 +29,9 @@ fi
 
 if [ ! -f "$HOME"/.abuild/*.rsa ]; then
     abuild-keygen -a -n
+
     sudo cp "$HOME"/.abuild/*.rsa.pub /etc/apk/keys/
+    cp "$HOME"/.abuild/*.rsa.pub /out/
 fi
 
 mkdir -p "$PKG_DIR"
