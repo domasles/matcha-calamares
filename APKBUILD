@@ -15,7 +15,7 @@ license="BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.
 
 provides="calamares=$calamaresver"
 depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
-    rsync mkinitfs tzdata openrc networkmanager lsblk parted
+    rsync mkinitfs tzdata networkmanager lsblk parted
     util-linux blkid sudo e2fsprogs sfdisk grub grub-bios"
 
 makedepends="
@@ -34,9 +34,9 @@ source="https://codeberg.org/Calamares/calamares/releases/download/v$calamaresve
 builddir="$srcdir"/calamares-"$calamaresver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
-_modules="welcome locale keyboard partition users services-openrc
-    summary unpackfs packages fstab bootloader mkinitfs umount
-    finished mount localecfg networkcfg hwclock shellprocess"
+_modules="welcome locale keyboard partition users summary
+    packages fstab bootloader mkinitfs umount finished
+    mount localecfg networkcfg hwclock shellprocess"
 
 for i in $_modules; do
     subpackages="$pkgname-mod-$i:_module $subpackages"
@@ -86,9 +86,10 @@ _module() {
             install -Dm644 "$srcdir"/shellprocess.conf "$subpkgdir"/etc/calamares/modules/shellprocess.conf
             install -Dm644 "$srcdir"/shellprocess@bootstrap.conf "$subpkgdir"/etc/calamares/modules/shellprocess@bootstrap.conf
             install -Dm644 "$srcdir"/shellprocess@install.conf "$subpkgdir"/etc/calamares/modules/shellprocess@install.conf ;;
-        locale) depends="$depends tzdata" ;;
-        services-openrc) depends="$depends openrc" ;;
-        networkcfg) depends="$depends networkmanager" ;;
+        locale)
+            depends="$depends tzdata" ;;
+        networkcfg)
+            depends="$depends networkmanager" ;;
     esac
 }
 
