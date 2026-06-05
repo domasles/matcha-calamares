@@ -15,8 +15,8 @@ license="BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.
 
 provides="calamares=$calamaresver"
 depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
-    rsync mkinitfs tzdata networkmanager lsblk parted
-    util-linux blkid sudo e2fsprogs sfdisk grub grub-bios"
+    rsync mkinitfs tzdata networkmanager lsblk parted util-linux
+    blkid sudo e2fsprogs sfdisk grub grub-bios grub-efi"
 
 makedepends="
     extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
@@ -101,6 +101,7 @@ package() {
 
     install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
     install -Dm644 "$srcdir"/overlay.txt "$pkgdir"/etc/calamares/excludes/overlay.txt
+    install -Dm644 "$srcdir"/packages.txt "$pkgdir"/etc/calamares/excludes/packages.txt
 
     mkdir -p "$pkgdir"/usr/share/calamares/branding/matcha
     cp -r "$srcdir"/matcha/* "$pkgdir"/usr/share/calamares/branding/matcha/
