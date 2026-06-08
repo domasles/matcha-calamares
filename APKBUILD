@@ -86,6 +86,8 @@ _module() {
             install -Dm644 "$srcdir"/shellprocess@install.conf "$subpkgdir"/etc/calamares/modules/shellprocess@install.conf ;;
         bootloader)
             install -Dm644 "$srcdir"/bootloader.conf "$subpkgdir"/etc/calamares/modules/bootloader.conf ;;
+        partition)
+            install -Dm644 "$srcdir"/partition.conf "$subpkgdir"/etc/calamares/modules/partition.conf ;;
         locale)
             depends="$depends tzdata" ;;
         networkcfg)
