@@ -9,7 +9,7 @@ pkgrel=0
 
 arch="x86_64"
 
-url="https://calamares.codeberg.page"
+url="https://github.com/domasles/matcha-calamares"
 pkgdesc="Matcha Linux installer framework, built on top of Calamares"
 license="BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.1-only AND LGPL-3.0-or-later AND MIT"
 
@@ -18,9 +18,8 @@ depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
     rsync mkinitfs tzdata networkmanager lsblk parted util-linux
     blkid sudo e2fsprogs sfdisk cryptsetup device-mapper lvm2 efibootmgr"
 
-makedepends="
-    extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
-    qt6-qtbase-dev qt6-qtdeclarative-dev qt6-qtsvg-dev
+makedepends=" extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
+    qt6-qtbase-dev qt6-qtdeclarative-dev qt6-qtsvg-dev rsync
     qt6-qt5compat-dev kcoreaddons-dev ki18n-dev kservice-dev
     kwidgetsaddons-dev kpmcore-dev parted-dev libatasmart-dev
     polkit-qt-dev libpwquality-dev python3-dev py3-pybind11-dev"
@@ -35,9 +34,9 @@ source="https://codeberg.org/Calamares/calamares/releases/download/v$calamaresve
 builddir="$srcdir"/calamares-"$calamaresver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
-_modules="welcome locale keyboard partition users summary
-    packages fstab bootloader mkinitfs umount finished
-    mount localecfg networkcfg hwclock shellprocess"
+_modules="welcome locale partition users summary packages
+    fstab bootloader mkinitfs umount finished mount localecfg
+    shellprocess"
 
 for i in $_modules; do
     subpackages="$pkgname-mod-$i:_module $subpackages"
@@ -79,19 +78,16 @@ _module() {
 
     case "$module" in
         users)
-            install -Dm644 "$srcdir"/users.conf "$subpkgdir"/etc/calamares/modules/users.conf ;;
+            install -Dm644 "$srcdir"/calamares-config/users.conf "$subpkgdir"/etc/calamares/modules/users.conf ;;
         shellprocess)
-            install -Dm644 "$srcdir"/shellprocess.conf "$subpkgdir"/etc/calamares/modules/shellprocess.conf
-            install -Dm644 "$srcdir"/shellprocess@bootstrap.conf "$subpkgdir"/etc/calamares/modules/shellprocess@bootstrap.conf
-            install -Dm644 "$srcdir"/shellprocess@install.conf "$subpkgdir"/etc/calamares/modules/shellprocess@install.conf ;;
+            mkdir -p "$subpkgdir"/etc/calamares/modules/
+            rsync -rtv --chmod=D755,F644 "$srcdir"/calamares-config/shellprocess*.conf "$subpkgdir"/etc/calamares/modules/ ;;
         bootloader)
-            install -Dm644 "$srcdir"/bootloader.conf "$subpkgdir"/etc/calamares/modules/bootloader.conf ;;
+            install -Dm644 "$srcdir"/calamares-config/bootloader.conf "$subpkgdir"/etc/calamares/modules/bootloader.conf ;;
         partition)
-            install -Dm644 "$srcdir"/partition.conf "$subpkgdir"/etc/calamares/modules/partition.conf ;;
+            install -Dm644 "$srcdir"/calamares-config/partition.conf "$subpkgdir"/etc/calamares/modules/partition.conf ;;
         locale)
             depends="$depends tzdata" ;;
-        networkcfg)
-            depends="$depends networkmanager" ;;
     esac
 }
 
@@ -101,11 +97,11 @@ package() {
     mkdir -p "$pkgdir"/usr/share/licenses/"$pkgname"
     cp -r "$builddir"/LICENSES/* "$pkgdir"/usr/share/licenses/"$pkgname"/
 
-    install -Dm644 "$srcdir"/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
-    install -Dm644 "$srcdir"/overlay.txt "$pkgdir"/etc/calamares/excludes/overlay.txt
-    install -Dm644 "$srcdir"/packages.txt "$pkgdir"/etc/calamares/excludes/packages.txt
-    install -Dm755 "$srcdir"/luks.sh "$pkgdir"/etc/calamares/scripts/luks.sh
+    install -Dm644 "$srcdir"/calamares-settings/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
+    install -Dm755 "$srcdir"/scripts/luks.sh "$pkgdir"/etc/calamares/scripts/luks.sh
+
+    rsync -rtv --chmod=D755,F644 "$srcdir"/excludes/ "$pkgdir"/etc/calamares/excludes/
 
     mkdir -p "$pkgdir"/usr/share/calamares/branding/matcha
-    cp -r "$srcdir"/matcha/* "$pkgdir"/usr/share/calamares/branding/matcha/
+    cp -r "$srcdir"/branding/matcha/* "$pkgdir"/usr/share/calamares/branding/matcha/
 }

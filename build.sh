@@ -39,11 +39,11 @@ mkdir -p "$PKG_DIR"
 cp "$WORKSPACE"/APKBUILD "$PKG_DIR"/
 
 # Create tarballs for the build context
-tar -czf "$PKG_DIR"/branding.tar.gz -C "$WORKSPACE"/branding matcha
-tar -czf "$PKG_DIR"/calamares-config.tar.gz -C "$WORKSPACE"/calamares-config .
-tar -czf "$PKG_DIR"/calamares-settings.tar.gz -C "$WORKSPACE"/calamares-settings .
-tar -czf "$PKG_DIR"/excludes.tar.gz -C "$WORKSPACE"/excludes .
-tar -czf "$PKG_DIR"/scripts.tar.gz -C "$WORKSPACE"/scripts .
+tar -czf "$PKG_DIR"/branding.tar.gz -C "$WORKSPACE" branding
+tar -czf "$PKG_DIR"/calamares-config.tar.gz -C "$WORKSPACE" calamares-config
+tar -czf "$PKG_DIR"/calamares-settings.tar.gz -C "$WORKSPACE" calamares-settings
+tar -czf "$PKG_DIR"/excludes.tar.gz -C "$WORKSPACE" excludes
+tar -czf "$PKG_DIR"/scripts.tar.gz -C "$WORKSPACE" scripts
 
 cd "$PKG_DIR"
 
