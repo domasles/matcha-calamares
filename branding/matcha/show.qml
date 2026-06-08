@@ -10,7 +10,7 @@ Presentation {
         Image {
             source: "slide.png"
             anchors.fill: parent
-            fillMode: Image.PreserveAspectFit
+            fillMode: Image.PreserveAspectCrop
         }
     }
 }
