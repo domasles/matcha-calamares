@@ -2,7 +2,7 @@
 
 # Matcha Calamares Installer
 
-A fully open-source, configured Calamares installer targeted for [Matcha Linux](https://github.com/domasles/matcha-linux)
+A fully open-source, configured Calamares installer targeted for [Matcha Linux](https://github.com/domasles/matcha-linux).
 
 ## What is it?
 
@@ -32,6 +32,7 @@ This pre-configured installer packages:
 - **Pre-configured Modules** - Ready-to-use modules for partitioning, user setup, and more
 - **Straightforward Setup Sequence** - A simple, linear installation workflow for the end user
 - **Custom Shell Processes** - For tasks that require more control, like package installation
+- **Support for encryption and swapspace** - Through the partition module both encrypted and unencypted disks can be configured, as well as swapspace
 
 Matcha Calamares aims to keep the system mint post-installation, so it installs everything from the ISO ROM, without reaching out to any external repositories. This ensures a consistent and reliable installation experience.
 
@@ -58,14 +59,6 @@ act workflow_dispatch
 3. **Find your builds**:
 Builds will be zipped in the `build/` directory after completion.
 
-## Build Process Details
-
-Every build will clean up itself - the container used to build will be deleted after the process completes. This ensures:
-
-- No leftover build artifacts
-- Clean environment for each build
-- Consistent, reproducible results
-
 ## Configuration
 
 The installer is configured through:
@@ -82,8 +75,16 @@ The installer follows a modular architecture:
 APKBUILD              # Build configuration script for the app package
 build.sh              # Build script to automate the build process
 
+branding/
+└── matcha/
+    ├── branding.desc  # Colors, names, product info
+    ├── logo.svg       # Product logo
+    ├── show.qml       # Slideshow configuration
+    └── slide.png      # Slideshow image
+
 calamares-config/
-├── mkinitfs.conf
+├── bootloader.conf
+├── partition.conf
 ├── shellprocess.conf
 ├── shellprocess@bootstrap.conf
 ├── shellprocess@install.conf
@@ -93,33 +94,30 @@ calamares-settings/
 └── settings.conf      # Main configuration file
 
 excludes/
-└── overlay.txt        # List of files to exclude from the installation image
+├── overlay.txt        # List of files to exclude from the installation image
+└── packages.txt       # List of packages to exclude from the installation image
 
-branding/
-└── matcha/
-    ├── branding.desc  # Colors, names, product info
-    ├── logo.svg       # Product logo
-    ├── show.qml       # Slideshow configuration
-    └── slide.png      # Slideshow image
+scripts/
+└── luks.sh            # Script for handling LUKS encryption flags during installation
 ```
 
 ## Customization Guide
 
-### Configuration Files
+### Core Configuration Files
 
-- **settings.conf** - Main configuration file defining module sequence
 - **calamares-config/*.conf** - Module-specific configurations
+- **calamares-settings/settings.conf** - Main configuration file defining module sequence
 - **branding/matcha/branding.desc** - Product naming and colors
 
 Adding custom directories requires updating `APKBUILD` and `build.sh` to include them in the build context.
 
-It is recommended to not remove any existing configuration and building steps in `APKBUILD` and `build.sh`, unless you know what you are doing.
+It is recommended to not remove any existing configuration and/or building steps in `APKBUILD`, `build.sh` or any of the existing directories, unless you know what you are doing.
 
 ### Branding Customization
 
 - Replace `branding/matcha/logo.svg` with your logo
 - Modify `branding/matcha/branding.desc` for colors and names
-- Update `branding/matcha/show.qml` for slideshow
+- Update `branding/matcha/show.qml` and any slide images for slideshow configuration
 
 ## Support
 
