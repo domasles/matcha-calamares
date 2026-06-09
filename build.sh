@@ -17,7 +17,7 @@ if [ "$(id -u)" -eq 0 ]; then
         adduser -D builduser
         adduser builduser abuild
 
-        echo "builduser ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/builduser
+        echo "builduser ALL=(ALL) NOPASSWD: ALL" | tee /etc/sudoers.d/builduser
     fi
 
     chown -R builduser:abuild "$WORKSPACE"
@@ -27,7 +27,7 @@ if [ "$(id -u)" -eq 0 ]; then
     exec su - builduser -c "cd '$WORKSPACE' && WORKSPACE='$WORKSPACE' sh '$0'"
 fi
 
-if [ ! -f "$HOME"/.abuild/*.rsa ]; then
+if [ ! -f "$HOME/.abuild/"*.rsa ]; then
     abuild-keygen -a -n
 
     sudo cp "$HOME"/.abuild/*.rsa.pub /etc/apk/keys/
@@ -36,14 +36,14 @@ fi
 
 mkdir -p "$PKG_DIR"
 
-cp "$WORKSPACE"/APKBUILD "$PKG_DIR"/
+cp "$WORKSPACE/APKBUILD" "$PKG_DIR/"
 
 # Create tarballs for the build context
-tar -czf "$PKG_DIR"/branding.tar.gz -C "$WORKSPACE" branding
-tar -czf "$PKG_DIR"/calamares-config.tar.gz -C "$WORKSPACE" calamares-config
-tar -czf "$PKG_DIR"/calamares-settings.tar.gz -C "$WORKSPACE" calamares-settings
-tar -czf "$PKG_DIR"/excludes.tar.gz -C "$WORKSPACE" excludes
-tar -czf "$PKG_DIR"/scripts.tar.gz -C "$WORKSPACE" scripts
+tar -czf "$PKG_DIR/branding.tar.gz" -C "$WORKSPACE" branding
+tar -czf "$PKG_DIR/calamares-config.tar.gz" -C "$WORKSPACE" calamares-config
+tar -czf "$PKG_DIR/calamares-settings.tar.gz" -C "$WORKSPACE" calamares-settings
+tar -czf "$PKG_DIR/excludes.tar.gz" -C "$WORKSPACE" excludes
+tar -czf "$PKG_DIR/scripts.tar.gz" -C "$WORKSPACE" scripts
 
 cd "$PKG_DIR"
 

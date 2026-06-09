@@ -18,7 +18,7 @@ depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
     rsync mkinitfs tzdata networkmanager lsblk parted util-linux
     blkid sudo e2fsprogs sfdisk cryptsetup device-mapper lvm2 efibootmgr"
 
-makedepends=" extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
+makedepends="extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
     qt6-qtbase-dev qt6-qtdeclarative-dev qt6-qtsvg-dev rsync
     qt6-qt5compat-dev kcoreaddons-dev ki18n-dev kservice-dev
     kwidgetsaddons-dev kpmcore-dev parted-dev libatasmart-dev
@@ -31,7 +31,7 @@ source="https://codeberg.org/Calamares/calamares/releases/download/v$calamaresve
     excludes.tar.gz
     scripts.tar.gz"
 
-builddir="$srcdir"/calamares-"$calamaresver"
+builddir="$srcdir/calamares-$calamaresver"
 subpackages="$pkgname-dev $pkgname-doc $pkgname-lang"
 
 _modules="welcome locale partition users summary packages
@@ -45,7 +45,7 @@ done
 
 prepare() {
     default_prepare
-    cd "$builddir"/src/modules
+    cd "$builddir/src/modules"
 
     for i in *; do
         if [ -d "$i" ] && ! echo "$_modules" | grep -qw "$i"; then
@@ -73,35 +73,37 @@ _module() {
     local module=${subpkgname##$pkgname-mod-}
     local path="usr/lib/calamares/modules"
 
-    mkdir -p "$subpkgdir"/"$path"
-    mv "$pkgdir"/"$path"/"$module" "$subpkgdir"/"$path"/"$module"
+    mkdir -p "$subpkgdir/$path"
+    mv "$pkgdir/$path/$module" "$subpkgdir/$path/$module"
 
     case "$module" in
         users)
-            install -Dm644 "$srcdir"/calamares-config/users.conf "$subpkgdir"/etc/calamares/modules/users.conf ;;
+            install -Dm644 "$srcdir/calamares-config/users.conf" "$subpkgdir/etc/calamares/modules/users.conf" ;;
         shellprocess)
-            mkdir -p "$subpkgdir"/etc/calamares/modules/
-            rsync -rtv --chmod=D755,F644 "$srcdir"/calamares-config/shellprocess*.conf "$subpkgdir"/etc/calamares/modules/ ;;
+            mkdir -p "$subpkgdir/etc/calamares/modules/"
+            rsync -rtv --chmod=D755,F644 "$srcdir/calamares-config/"shellprocess*.conf "$subpkgdir/etc/calamares/modules/" ;;
         bootloader)
-            install -Dm644 "$srcdir"/calamares-config/bootloader.conf "$subpkgdir"/etc/calamares/modules/bootloader.conf ;;
+            install -Dm644 "$srcdir/calamares-config/bootloader.conf" "$subpkgdir/etc/calamares/modules/bootloader.conf" ;;
         partition)
-            install -Dm644 "$srcdir"/calamares-config/partition.conf "$subpkgdir"/etc/calamares/modules/partition.conf ;;
+            install -Dm644 "$srcdir/calamares-config/partition.conf" "$subpkgdir/etc/calamares/modules/partition.conf" ;;
         locale)
             depends="$depends tzdata" ;;
+        finished)
+            install -Dm644 "$srcdir/calamares-config/finished.conf" "$subpkgdir/etc/calamares/modules/finished.conf" ;;
     esac
 }
 
 package() {
     DESTDIR="$pkgdir" cmake --install build
 
-    mkdir -p "$pkgdir"/usr/share/licenses/"$pkgname"
-    cp -r "$builddir"/LICENSES/* "$pkgdir"/usr/share/licenses/"$pkgname"/
+    install -Dm644 "$srcdir/calamares-settings/settings.conf" "$pkgdir/usr/share/calamares/settings.conf"
+    install -Dm755 "$srcdir/scripts/luks.sh" "$pkgdir/etc/calamares/scripts/luks.sh"
 
-    install -Dm644 "$srcdir"/calamares-settings/settings.conf "$pkgdir"/usr/share/calamares/settings.conf
-    install -Dm755 "$srcdir"/scripts/luks.sh "$pkgdir"/etc/calamares/scripts/luks.sh
+    rsync -rtv --chmod=D755,F644 "$srcdir/excludes/" "$pkgdir/etc/calamares/excludes/"
 
-    rsync -rtv --chmod=D755,F644 "$srcdir"/excludes/ "$pkgdir"/etc/calamares/excludes/
+    mkdir -p "$pkgdir/usr/share/calamares/branding"
+    mkdir -p "$pkgdir/usr/share/licenses/$pkgname"
 
-    mkdir -p "$pkgdir"/usr/share/calamares/branding/matcha
-    cp -r "$srcdir"/branding/matcha/* "$pkgdir"/usr/share/calamares/branding/matcha/
+    cp -r "$srcdir/branding/matcha" "$pkgdir/usr/share/calamares/branding"
+    cp -r "$builddir/LICENSES" "$pkgdir/usr/share/licenses/$pkgname"
 }
