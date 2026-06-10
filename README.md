@@ -88,7 +88,8 @@ calamares-config/
 ├── shellprocess.conf
 ├── shellprocess@bootstrap.conf
 ├── shellprocess@install.conf
-└── users.conf
+├── users.conf
+└── welcome.conf
 
 calamares-settings/
 └── settings.conf      # Main configuration file

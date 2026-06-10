@@ -1,11 +1,9 @@
 #!/bin/sh
 set -e
 
-ALPINE_VERSION="3.23"
 PACKAGE_NAME="matcha-calamares"
 
 WORKSPACE=$(pwd)
-
 BUILD_ROOT="$HOME/build-space"
 PKG_DIR="$BUILD_ROOT/$PACKAGE_NAME"
 
