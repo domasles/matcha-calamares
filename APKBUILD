@@ -16,13 +16,15 @@ license="BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.
 provides="calamares=$calamaresver"
 depends="!calamares ckbcomp musl-locales os-prober yaml-cpp
     rsync mkinitfs tzdata networkmanager lsblk parted util-linux
-    blkid sudo e2fsprogs sfdisk cryptsetup device-mapper lvm2 efibootmgr"
+    blkid sudo e2fsprogs sfdisk cryptsetup device-mapper lvm2
+    efibootmgr qt6-qtwayland"
 
 makedepends="extra-cmake-modules ninja yaml-cpp-dev qt6-qttools-dev
     qt6-qtbase-dev qt6-qtdeclarative-dev qt6-qtsvg-dev rsync
-    qt6-qt5compat-dev kcoreaddons-dev ki18n-dev kservice-dev
-    kwidgetsaddons-dev kpmcore-dev parted-dev libatasmart-dev
-    polkit-qt-dev libpwquality-dev python3-dev py3-pybind11-dev"
+    qt6-qt5compat-dev qt6-qtwayland kcoreaddons-dev ki18n-dev
+    kservice-dev kwidgetsaddons-dev kpmcore-dev parted-dev
+    libatasmart-dev polkit-qt-dev libpwquality-dev python3-dev
+    py3-pybind11-dev"
 
 source="https://codeberg.org/Calamares/calamares/releases/download/v$calamaresver/calamares-$calamaresver.tar.gz
     branding.tar.gz
@@ -63,6 +65,7 @@ build() {
         -DWITH_PYTHON=ON \
         -DWITH_PYBIND11=ON \
         -DQT_VERSION_MAJOR=6 \
+        -DWITH_QT6_WAYLAND=ON \
         -DSKIP_MODULES="$(echo $_skip_modules | tr ' ' ';')"
     cmake --build build
 }
@@ -77,6 +80,8 @@ _module() {
     mv "$pkgdir/$path/$module" "$subpkgdir/$path/$module"
 
     case "$module" in
+        welcome)
+            install -Dm644 "$srcdir/calamares-config/welcome.conf" "$subpkgdir/etc/calamares/modules/welcome.conf" ;;
         users)
             install -Dm644 "$srcdir/calamares-config/users.conf" "$subpkgdir/etc/calamares/modules/users.conf" ;;
         shellprocess)
