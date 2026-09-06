@@ -33,7 +33,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload APK to Release
-        if: ${{ env.ACT != 'true' }}
+        if: ${{ env.ACT != 'true' && github.event_name == 'release'}}
         uses: softprops/action-gh-release@v2
         with:
           files: |
