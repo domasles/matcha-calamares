@@ -4,7 +4,7 @@ pkgname=matcha-calamares
 
 calamaresver=3.4.2
 
-pkgver=1.1.0.$calamaresver
+pkgver=1.1.1.$calamaresver
 pkgrel=0
 
 arch="x86_64"
