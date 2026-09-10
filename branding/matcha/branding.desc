@@ -6,10 +6,10 @@ navigation: widget
 strings:
     productName:        Matcha Linux
     shortProductName:   Matcha
-    version:            ${VERSION}
-    shortVersion:       ${VERSION}
-    versionedName:      Matcha Linux ${VERSION}
-    shortVersionedName: Matcha ${VERSION}
+    version:            $VERSION
+    shortVersion:       $VERSION
+    versionedName:      Matcha Linux $VERSION
+    shortVersionedName: Matcha $VERSION
     productUrl:         https://github.com/domasles/matcha-linux
     supportUrl:         https://github.com/domasles/matcha-linux/issues
     releaseNotesUrl:    https://github.com/domasles/matcha-linux

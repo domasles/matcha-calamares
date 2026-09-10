@@ -102,9 +102,9 @@ package() {
     DESTDIR="$pkgdir" cmake --install build
 
     install -Dm644 "$srcdir/calamares-settings/settings.conf" "$pkgdir/usr/share/calamares/settings.conf"
-    install -Dm755 "$srcdir/scripts/luks.sh" "$pkgdir/etc/calamares/scripts/luks.sh"
 
-    rsync -rtv --chmod=D755,F644 "$srcdir/excludes/" "$pkgdir/etc/calamares/excludes/"
+    rsync -rtv --mkpath --chmod=D755,F755 "$srcdir/scripts/" "$pkgdir/etc/calamares/scripts/"
+    rsync -rtv --mkpath --chmod=D755,F644 "$srcdir/excludes/" "$pkgdir/etc/calamares/excludes/"
 
     mkdir -p "$pkgdir/usr/share/calamares/branding"
     mkdir -p "$pkgdir/usr/share/licenses/$pkgname"
